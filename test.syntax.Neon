@@ -1,10 +1,4 @@
 Load std.io 
 program HelloWorld begin
     print "Hello world";
-    int number1 = 10;
-    if number1 eq 10 then {
-        for (int i = 0; i < 10; ++i) {
-            print number1;
-        }
-    }
 program HelloWorld end
