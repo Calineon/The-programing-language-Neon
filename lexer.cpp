@@ -12,14 +12,20 @@ struct token
 	token_type type;
 	std::string value;
 };
-static token get_token(const std::string&value)
-{
-	return token{};
-}
-class lexer
-{
-public:
-	bool get_next_token(const std::string& string) {
-		return 0;
+
+static std::string token_type_to(token_type type) {
+	switch (type) {
+	case token_type::KEYWORD:
+		return "KEYWORD";
+	case token_type::IDENTIFIER:
+		return "IDENTIFIER";
+	case token_type::STRING:
+		return "STRING";
+	case token_type::NUMBER:
+		return "NUMBER";
+	case token_type::SYMONCOL:
+		return "SYMONCOL";
+	default:
+		return "UNKNOWN";
 	}
-};
+}
