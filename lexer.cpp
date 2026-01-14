@@ -29,16 +29,23 @@ static std::string token_type_to(token_type type) {
 		return "UNKNOWN";
 	}
 }
-class state {
-public:
-
-};
 enum FNC_State_Machine {
 	START,
 	IDENTIFIER,
-	end
+	NUMBER,
+	STRING,
+	OPERATOR,
+	COMMENT,
+	WHITESPACE,
+	DONE,
+	ERROR
 };
 class new_state {
 public:
 	FNC_State_Machine current_state;
+std::string next_token(FNC_State_Machine current_state) {
+		switch (current_state) {
+		case START:
+		}
+	}
 };
