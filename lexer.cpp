@@ -5,7 +5,7 @@ enum class token_type
 	IDENTIFIER,
 	STRING,
 	NUMBER,
-	SYMONCOL
+	SEMICOLON
 };
 struct token
 {
@@ -23,9 +23,22 @@ static std::string token_type_to(token_type type) {
 		return "STRING";
 	case token_type::NUMBER:
 		return "NUMBER";
-	case token_type::SYMONCOL:
-		return "SYMONCOL";
+	case token_type::SEMICOLON:
+		return "SEMICOLON";
 	default:
 		return "UNKNOWN";
 	}
 }
+class state {
+public:
+
+};
+enum FNC_State_Machine {
+	START,
+	IDENTIFIER,
+	end
+};
+class new_state {
+public:
+	FNC_State_Machine current_state;
+};
