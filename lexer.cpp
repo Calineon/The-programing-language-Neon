@@ -38,7 +38,8 @@ enum FNC_State_Machine {
 	COMMENT,
 	WHITESPACE,
 	DONE,
-	ERROR
+	ERROR,
+	END
 };
 class new_state {
 public:
@@ -46,6 +47,20 @@ public:
 std::string next_token(FNC_State_Machine current_state) {
 		switch (current_state) {
 		case START:
+			if (current_state == START) {
+				current_state = FNC_State_Machine::START;
+				std::cout << "Finite State Machine is Started"<<"\n";
+
+		case IDENTIFIER:
+			if (current_state == END) {
+				current_state = FNC_State_Machine::END;
+				std::cout << "Finite State Machine is Ended"<<"\n";
+			}
+			}
+			break;
+		default:
+			break;
 		}
 	}
 };
+
