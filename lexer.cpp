@@ -13,7 +13,7 @@ struct token
 	std::string value;
 };
 
-static std::string token_type_to(token_type type) {
+ std::string token_type_to(token_type type) {
 	switch (type) {
 	case token_type::KEYWORD:
 		return "KEYWORD";
@@ -41,34 +41,80 @@ enum FNC_State_Machine {
 	ERROR,
 	END
 };
-class new_state {
+class Lexer{
 public:
-	FNC_State_Machine current_state;
-std::string next_token(FNC_State_Machine current_state) {
-		switch (current_state) {
-		case START:
-			if (current_state == START) {
-				current_state = FNC_State_Machine::START;
-				std::cout << "Finite State Machine is Started"<<"\n";
+	FNC_State_Machine current_state=START;
+	token next_token(const std::string&input){
+		token t;
+		t.type = token_type::IDENTIFIER;
+		t.value = "";
+		size_t pos = 0;
+		while (pos < input.size() && current_state != DONE) {
+			char ch = input[pos++];
+			switch (current_state) {
+			case START:
+				if (isalpha(ch)) {
+					current_state = IDENTIFIER;
+					t.value += ch;
+				}
+				else if (isdigit(ch)){
+					current_state = NUMBER;
+					t.value += ch;
+				}
+				else if (ch==';') {
+					t.type = token_type::SEMICOLON;
+					t.value = ";";
+					current_state = DONE;
+				}
+				else if (isspace(ch)) {
+					current_state = WHITESPACE;
+				}
+				else {
+					current_state = ERROR;
+				}
+				break;
+			case IDENTIFIER:
+				if (isalnum(ch)) {
+					t.value += ch;
+				}
+				else {
+					--pos;
+					if (t.value == "if" || t.value == "program") {
+						t.type = token_type::KEYWORD;
+					}
+					current_state = DONE;
+				}
+				break;
+				
+			case NUMBER:
+				if (isdigit(ch)) {
+					t.value += ch;
+				}
+				else {
+					--pos;
+					t.type = token_type::NUMBER;
+					current_state = DONE;
+				}
+				break;
 
-		case IDENTIFIER:
-			if (current_state == END) {
-				current_state = FNC_State_Machine::END;
-				std::cout << "Finite State Machine is Ended"<<"\n";
+			case WHITESPACE:
+				if (!isspace(ch)) {
+					--pos;
+					current_state = START;
+				}
+				break;
+
+			default:
+				current_state = ERROR;
+				break;
 			}
-			}
-			break;
-		default:
-			break;
 		}
-		return "UNKNOWN";
+		if (current_state == ERROR) {
+			t.type = token_type::IDENTIFIER;
+			t.value = "ERROR";
+		}
+		current_state = START;
+		std::cout << "Token: " << token_type_to(t.type) << " [" << t.value << "]" << std::endl;
+		return t;
 	}
 };
-int main() {
-	new_state fsm{};
-	fsm.current_state = FNC_State_Machine::START;
-	fsm.next_token(fsm.current_state);
-	fsm.current_state = FNC_State_Machine::END;
-	fsm.next_token(fsm.current_state);
-	return 0;
-}
