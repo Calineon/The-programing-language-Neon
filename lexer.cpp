@@ -61,6 +61,14 @@ std::string next_token(FNC_State_Machine current_state) {
 		default:
 			break;
 		}
+		return "UNKNOWN";
 	}
 };
-
+int main() {
+	new_state fsm{};
+	fsm.current_state = FNC_State_Machine::START;
+	fsm.next_token(fsm.current_state);
+	fsm.current_state = FNC_State_Machine::END;
+	fsm.next_token(fsm.current_state);
+	return 0;
+}
