@@ -4,6 +4,8 @@
 #include "lexer.h"
 #include <vector>
 #include <string>
+#include <iostream>
+#include <stdexcept>
 
 struct AstNode {
     std::string type;
@@ -15,21 +17,39 @@ class Parser {
     Lexer& lexer;
     token current;
 
-    void expect(token_type type, std::string value = "") {
-        if (current.type != type || (value != "" && current.value != value)) {
-            std::cerr << "Parse error at " << current.line << ":" << current.column
-                << ": expected " << value << std::endl;
-            exit(1);
+
+    void advance() { current = lexer.next_token(); }
+
+    
+    void expect(token_type type, const std::string& value = "") {
+        if (current.type != type || (!value.empty() && current.value != value)) {
+            std::string msg = "Parse error at " + std::to_string(current.line) + ":" +
+                              std::to_string(current.column) + ": expected ";
+            if (!value.empty()) msg += "'" + value + "'";
+            else msg += token_type_to(type);
+            msg += ", got '" + current.value + "'";
+            throw std::runtime_error(msg);
         }
-        current = lexer.next_token();
+        advance();
     }
 
+    
+    const token& peek() const { return current; }
+
+    
+    bool at_end() const { return current.type == token_type::EOF_TOKEN; }
+
+    
     AstNode parse_expr();
     AstNode parse_statement();
 
 public:
-    Parser(Lexer& l) : lexer(l) { current = lexer.next_token(); }
+    
+    explicit Parser(Lexer& l) : lexer(l) {
+        advance(); 
+    }
+
     AstNode parse_program();
 };
 
-#endif
+#endif // PARSER_H
