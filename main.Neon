@@ -1,0 +1,8 @@
+Laod std.io
+program calculator begin 
+print "print to first number";
+int number1;
+char character;
+int number2;
+int result;
+program end;
