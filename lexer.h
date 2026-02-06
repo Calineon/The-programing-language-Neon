@@ -23,6 +23,13 @@ struct token {
     int column = 1;
 };
 
+token_type getType(token_type type){
+return type;
+}
+
+std::string getValue(std::string value){
+return value;
+}
 inline std::string token_type_to(token_type type) {
     switch (type) {
         case token_type::KEYWORD:     return "KEYWORD";
